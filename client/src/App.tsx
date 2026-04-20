@@ -15,6 +15,8 @@ import NotesPage from './pages/NotesPage';
 import ChartsPage from './pages/ChartsPage';
 import ReportsPage from './pages/ReportsPage';
 import ManagerPage from './pages/ManagerPage';
+import SearchPage from './pages/SearchPage';
+import ChecklistPage from './pages/ChecklistPage';
 
 export default function App() {
   return (
@@ -37,7 +39,8 @@ export default function App() {
               <Route path="/issues" element={<IssuesPage />} />
               <Route path="/feedback" element={<FeedbackPage />} />
               <Route path="/notes" element={<NotesPage />} />
-              <Route path="/checklist" element={<PlaceholderPage title="Checklist" description="Onboarding checklist coming in Phase 4." />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/checklist" element={<ChecklistPage />} />
               <Route path="/analytics" element={<ChartsPage />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route

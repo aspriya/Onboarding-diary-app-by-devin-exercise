@@ -194,14 +194,14 @@ export function Layout() {
             >
               <Menu size={24} />
             </button>
-            {/* Search placeholder for Phase 4 */}
             <div className="hidden md:flex items-center">
-              <div className="relative">
+              <div className="relative cursor-pointer" onClick={() => window.location.href = '/search'}>
                 <input
                   type="text"
                   placeholder="Search..."
-                  disabled
-                  className="input-field w-64 pl-10 opacity-50 cursor-not-allowed"
+                  readOnly
+                  className="input-field w-64 pl-10 cursor-pointer"
+                  onFocus={(e) => { e.preventDefault(); window.location.href = '/search'; }}
                 />
                 <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary dark:text-text-secondary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

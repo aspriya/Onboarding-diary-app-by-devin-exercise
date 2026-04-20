@@ -12,6 +12,8 @@ import { dashboardRouter } from './routes/dashboard';
 import { analyticsRouter } from './routes/analytics';
 import { reportsRouter } from './routes/reports';
 import { managerRouter } from './routes/manager';
+import { searchRouter } from './routes/search';
+import { checklistRouter } from './routes/checklist';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -37,6 +39,8 @@ app.use('/api/dashboard', dashboardRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/manager', managerRouter);
+app.use('/api/search', searchRouter);
+app.use('/api/checklists', checklistRouter);
 
 app.use(errorHandler);
 
