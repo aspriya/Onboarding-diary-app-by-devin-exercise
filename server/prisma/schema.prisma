@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  recruit
+  manager
+  admin
+}
+
+enum ThemePreference {
+  light
+  dark
+  system
+}
+
+enum TaskCategory {
+  Learning
+  Setup
+  Meeting
+  Documentation
+  Development
+  Other
+}
+
+enum TaskStatus {
+  NotStarted
+  InProgress
+  Completed
+  Blocked
+}
+
+enum Priority {
+  Low
+  Medium
+  High
+  Critical
+}
+
+enum IssueSeverity {
+  Low
+  Medium
+  High
+  Critical
+}
+
+enum IssueStatus {
+  Open
+  InProgress
+  Resolved
+  Closed
+}
+
+enum FeedbackType {
+  Positive
+  Suggestion
+  Concern
+}
+
+model User {
+  id              String          @id @default(uuid())
+  email           String          @unique
+  password        String
+  name            String
+  role            Role            @default(recruit)
+  department      String?
+  startDate       DateTime?
+  managerId       String?
+  manager         User?           @relation("ManagerRecruits", fields: [managerId], references: [id])
+  recruits        User[]          @relation("ManagerRecruits")
+  themePreference ThemePreference @default(system)
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  tasks              TaskEntry[]
+  issues             IssueEntry[]
+  feedback           FeedbackEntry[]
+  notes              NoteEntry[]
+  assignedChecklists AssignedChecklist[]
+  createdTemplates   ChecklistTemplate[]
+
+  @@index([managerId])
+  @@index([role])
+}
+
+model TaskEntry {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  date        DateTime
+  title       String       @db.VarChar(200)
+  description String?      @db.Text
+  category    TaskCategory
+  status      TaskStatus   @default(NotStarted)
+  priority    Priority     @default(Medium)
+  isDeleted   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId, date])
+  @@index([status])
+}
+
+model IssueEntry {
+  id              String        @id @default(uuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  date            DateTime
+  title           String        @db.VarChar(200)
+  description     String        @db.Text
+  severity        IssueSeverity
+  status          IssueStatus   @default(Open)
+  resolutionNotes String?       @db.Text
+  isDeleted       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId, date])
+  @@index([severity])
+}
+
+model FeedbackEntry {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  date      DateTime
+  subject   String       @db.VarChar(200)
+  type      FeedbackType
+  details   String       @db.Text
+  isDeleted Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([userId, date])
+}
+
+model NoteEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime
+  title     String   @db.VarChar(200)
+  content   String?  @db.Text
+  tags      String[] @default([])
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+}
+
+model ChecklistTemplate {
+  id          String                  @id @default(uuid())
+  name        String                  @db.VarChar(200)
+  description String?                 @db.Text
+  createdBy   String
+  creator     User                    @relation(fields: [createdBy], references: [id])
+  isActive    Boolean                 @default(true)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  items       ChecklistTemplateItem[]
+  assignments AssignedChecklist[]
+}
+
+model ChecklistTemplateItem {
+  id          String            @id @default(uuid())
+  templateId  String
+  template    ChecklistTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  title       String            @db.VarChar(200)
+  description String?           @db.Text
+  sortOrder   Int
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([templateId])
+}
+
+model AssignedChecklist {
+  id          String                 @id @default(uuid())
+  userId      String
+  user        User                   @relation(fields: [userId], references: [id])
+  templateId  String
+  template    ChecklistTemplate      @relation(fields: [templateId], references: [id])
+  name        String                 @db.VarChar(200)
+  description String?                @db.Text
+  completedAt DateTime?
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  items       AssignedChecklistItem[]
+
+  @@index([userId])
+}
+
+model AssignedChecklistItem {
+  id          String            @id @default(uuid())
+  checklistId String
+  checklist   AssignedChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  title       String            @db.VarChar(200)
+  description String?           @db.Text
+  sortOrder   Int
+  isCompleted Boolean           @default(false)
+  completedAt DateTime?
+  notes       String?           @db.Text
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([checklistId])
+}
