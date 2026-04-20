@@ -7,7 +7,6 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { PlaceholderPage } from './pages/PlaceholderPage';
 import TasksPage from './pages/TasksPage';
 import IssuesPage from './pages/IssuesPage';
 import FeedbackPage from './pages/FeedbackPage';
@@ -17,6 +16,7 @@ import ReportsPage from './pages/ReportsPage';
 import ManagerPage from './pages/ManagerPage';
 import SearchPage from './pages/SearchPage';
 import ChecklistPage from './pages/ChecklistPage';
+import AdminUsersPage from './pages/AdminUsersPage';
 
 export default function App() {
   return (
@@ -56,7 +56,7 @@ export default function App() {
                 path="/admin/users"
                 element={
                   <ProtectedRoute roles={['admin']}>
-                    <PlaceholderPage title="User Management" description="Admin user management coming in Phase 5." />
+                    <AdminUsersPage />
                   </ProtectedRoute>
                 }
               />
