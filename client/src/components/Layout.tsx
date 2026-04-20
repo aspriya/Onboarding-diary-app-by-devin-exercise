@@ -7,6 +7,7 @@ import {
   MessageSquare,
   FileText,
   BarChart3,
+  PieChart,
   Settings,
   LogOut,
   Menu,
@@ -24,8 +25,13 @@ const navItems = [
   { to: '/issues', icon: AlertCircle, label: 'Issues' },
   { to: '/feedback', icon: MessageSquare, label: 'Feedback' },
   { to: '/notes', icon: FileText, label: 'Notes' },
+  { to: '/analytics', icon: PieChart, label: 'Analytics' },
   { to: '/checklist', icon: CheckSquare, label: 'Checklist' },
   { to: '/reports', icon: BarChart3, label: 'Reports' },
+];
+
+const managerNavItems = [
+  { to: '/manager', icon: Users, label: 'Recruits' },
 ];
 
 const adminNavItems = [
@@ -91,6 +97,34 @@ export function Layout() {
               {item.label}
             </NavLink>
           ))}
+
+          {(user?.role === 'manager' || user?.role === 'admin') && (
+            <>
+              <div className="pt-4 pb-2 px-3">
+                <p className="text-xs font-semibold text-sidebar-text/50 dark:text-sidebar-text-dark/50 uppercase tracking-wider">
+                  Management
+                </p>
+              </div>
+              {managerNavItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setSidebarOpen(false)}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-input text-sm font-medium transition-colors',
+                      isActive
+                        ? 'bg-primary text-white'
+                        : 'text-sidebar-text dark:text-sidebar-text-dark hover:bg-white/10 hover:text-white'
+                    )
+                  }
+                >
+                  <item.icon size={18} />
+                  {item.label}
+                </NavLink>
+              ))}
+            </>
+          )}
 
           {user?.role === 'admin' && (
             <>

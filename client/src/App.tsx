@@ -12,6 +12,9 @@ import TasksPage from './pages/TasksPage';
 import IssuesPage from './pages/IssuesPage';
 import FeedbackPage from './pages/FeedbackPage';
 import NotesPage from './pages/NotesPage';
+import ChartsPage from './pages/ChartsPage';
+import ReportsPage from './pages/ReportsPage';
+import ManagerPage from './pages/ManagerPage';
 
 export default function App() {
   return (
@@ -35,7 +38,16 @@ export default function App() {
               <Route path="/feedback" element={<FeedbackPage />} />
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/checklist" element={<PlaceholderPage title="Checklist" description="Onboarding checklist coming in Phase 4." />} />
-              <Route path="/reports" element={<PlaceholderPage title="Reports" description="Reports & exports coming in Phase 3." />} />
+              <Route path="/analytics" element={<ChartsPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route
+                path="/manager"
+                element={
+                  <ProtectedRoute roles={['manager', 'admin']}>
+                    <ManagerPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/settings" element={<SettingsPage />} />
               <Route
                 path="/admin/users"

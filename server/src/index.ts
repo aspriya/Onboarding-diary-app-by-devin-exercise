@@ -8,6 +8,10 @@ import { tasksRouter } from './routes/tasks';
 import { issuesRouter } from './routes/issues';
 import { feedbackRouter } from './routes/feedback';
 import { notesRouter } from './routes/notes';
+import { dashboardRouter } from './routes/dashboard';
+import { analyticsRouter } from './routes/analytics';
+import { reportsRouter } from './routes/reports';
+import { managerRouter } from './routes/manager';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -29,6 +33,10 @@ app.use('/api/tasks', tasksRouter);
 app.use('/api/issues', issuesRouter);
 app.use('/api/feedback', feedbackRouter);
 app.use('/api/notes', notesRouter);
+app.use('/api/dashboard', dashboardRouter);
+app.use('/api/analytics', analyticsRouter);
+app.use('/api/reports', reportsRouter);
+app.use('/api/manager', managerRouter);
 
 app.use(errorHandler);
 
