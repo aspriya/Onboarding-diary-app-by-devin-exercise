@@ -4,6 +4,10 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import { authRouter } from './routes/auth';
+import { tasksRouter } from './routes/tasks';
+import { issuesRouter } from './routes/issues';
+import { feedbackRouter } from './routes/feedback';
+import { notesRouter } from './routes/notes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -21,6 +25,10 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/tasks', tasksRouter);
+app.use('/api/issues', issuesRouter);
+app.use('/api/feedback', feedbackRouter);
+app.use('/api/notes', notesRouter);
 
 app.use(errorHandler);
 

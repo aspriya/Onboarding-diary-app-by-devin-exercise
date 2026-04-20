@@ -8,6 +8,10 @@ import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
+import TasksPage from './pages/TasksPage';
+import IssuesPage from './pages/IssuesPage';
+import FeedbackPage from './pages/FeedbackPage';
+import NotesPage from './pages/NotesPage';
 
 export default function App() {
   return (
@@ -26,10 +30,10 @@ export default function App() {
               }
             >
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/tasks" element={<PlaceholderPage title="Tasks" description="Task management coming in Phase 2." />} />
-              <Route path="/issues" element={<PlaceholderPage title="Issues" description="Issue tracking coming in Phase 2." />} />
-              <Route path="/feedback" element={<PlaceholderPage title="Feedback" description="Feedback notes coming in Phase 2." />} />
-              <Route path="/notes" element={<PlaceholderPage title="Notes" description="Additional notes coming in Phase 2." />} />
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/issues" element={<IssuesPage />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
+              <Route path="/notes" element={<NotesPage />} />
               <Route path="/checklist" element={<PlaceholderPage title="Checklist" description="Onboarding checklist coming in Phase 4." />} />
               <Route path="/reports" element={<PlaceholderPage title="Reports" description="Reports & exports coming in Phase 3." />} />
               <Route path="/settings" element={<SettingsPage />} />
