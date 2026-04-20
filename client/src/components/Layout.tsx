@@ -7,6 +7,7 @@ import {
   MessageSquare,
   FileText,
   BarChart3,
+  PieChart,
   Settings,
   LogOut,
   Menu,
@@ -24,8 +25,13 @@ const navItems = [
   { to: '/issues', icon: AlertCircle, label: 'Issues' },
   { to: '/feedback', icon: MessageSquare, label: 'Feedback' },
   { to: '/notes', icon: FileText, label: 'Notes' },
+  { to: '/analytics', icon: PieChart, label: 'Analytics' },
   { to: '/checklist', icon: CheckSquare, label: 'Checklist' },
   { to: '/reports', icon: BarChart3, label: 'Reports' },
+];
+
+const managerNavItems = [
+  { to: '/manager', icon: Users, label: 'Recruits' },
 ];
 
 const adminNavItems = [
@@ -91,6 +97,34 @@ export function Layout() {
               {item.label}
             </NavLink>
           ))}
+
+          {(user?.role === 'manager' || user?.role === 'admin') && (
+            <>
+              <div className="pt-4 pb-2 px-3">
+                <p className="text-xs font-semibold text-sidebar-text/50 dark:text-sidebar-text-dark/50 uppercase tracking-wider">
+                  Management
+                </p>
+              </div>
+              {managerNavItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setSidebarOpen(false)}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-input text-sm font-medium transition-colors',
+                      isActive
+                        ? 'bg-primary text-white'
+                        : 'text-sidebar-text dark:text-sidebar-text-dark hover:bg-white/10 hover:text-white'
+                    )
+                  }
+                >
+                  <item.icon size={18} />
+                  {item.label}
+                </NavLink>
+              ))}
+            </>
+          )}
 
           {user?.role === 'admin' && (
             <>
@@ -160,14 +194,14 @@ export function Layout() {
             >
               <Menu size={24} />
             </button>
-            {/* Search placeholder for Phase 4 */}
             <div className="hidden md:flex items-center">
-              <div className="relative">
+              <div className="relative cursor-pointer" onClick={() => window.location.href = '/search'}>
                 <input
                   type="text"
                   placeholder="Search..."
-                  disabled
-                  className="input-field w-64 pl-10 opacity-50 cursor-not-allowed"
+                  readOnly
+                  className="input-field w-64 pl-10 cursor-pointer"
+                  onFocus={(e) => { e.preventDefault(); window.location.href = '/search'; }}
                 />
                 <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary dark:text-text-secondary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

@@ -7,7 +7,16 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { PlaceholderPage } from './pages/PlaceholderPage';
+import TasksPage from './pages/TasksPage';
+import IssuesPage from './pages/IssuesPage';
+import FeedbackPage from './pages/FeedbackPage';
+import NotesPage from './pages/NotesPage';
+import ChartsPage from './pages/ChartsPage';
+import ReportsPage from './pages/ReportsPage';
+import ManagerPage from './pages/ManagerPage';
+import SearchPage from './pages/SearchPage';
+import ChecklistPage from './pages/ChecklistPage';
+import AdminUsersPage from './pages/AdminUsersPage';
 
 export default function App() {
   return (
@@ -26,18 +35,28 @@ export default function App() {
               }
             >
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/tasks" element={<PlaceholderPage title="Tasks" description="Task management coming in Phase 2." />} />
-              <Route path="/issues" element={<PlaceholderPage title="Issues" description="Issue tracking coming in Phase 2." />} />
-              <Route path="/feedback" element={<PlaceholderPage title="Feedback" description="Feedback notes coming in Phase 2." />} />
-              <Route path="/notes" element={<PlaceholderPage title="Notes" description="Additional notes coming in Phase 2." />} />
-              <Route path="/checklist" element={<PlaceholderPage title="Checklist" description="Onboarding checklist coming in Phase 4." />} />
-              <Route path="/reports" element={<PlaceholderPage title="Reports" description="Reports & exports coming in Phase 3." />} />
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/issues" element={<IssuesPage />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
+              <Route path="/notes" element={<NotesPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/checklist" element={<ChecklistPage />} />
+              <Route path="/analytics" element={<ChartsPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route
+                path="/manager"
+                element={
+                  <ProtectedRoute roles={['manager', 'admin']}>
+                    <ManagerPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/settings" element={<SettingsPage />} />
               <Route
                 path="/admin/users"
                 element={
                   <ProtectedRoute roles={['admin']}>
-                    <PlaceholderPage title="User Management" description="Admin user management coming in Phase 5." />
+                    <AdminUsersPage />
                   </ProtectedRoute>
                 }
               />
