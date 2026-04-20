@@ -133,8 +133,44 @@ User Action ──▶ React Page ──▶ API Client (fetch)
 
 ### Prerequisites
 
-- Node.js 18+
-- PostgreSQL 14+
+- **Node.js** 18+ — [Download](https://nodejs.org/)
+- **npm** 9+ (comes with Node.js)
+- **PostgreSQL** 14+ — [Download](https://www.postgresql.org/download/)
+
+#### Installing PostgreSQL
+
+**macOS** (Homebrew):
+```bash
+brew install postgresql@16
+brew services start postgresql@16
+```
+
+**Ubuntu/Debian**:
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+```
+
+**Windows**: Download the installer from [postgresql.org](https://www.postgresql.org/download/windows/) and follow the setup wizard.
+
+#### Creating the Database
+
+After installing PostgreSQL, create the application database:
+
+```bash
+# Option 1: Using createdb (if available)
+createdb onboarding_diary
+
+# Option 2: Using psql
+psql -U postgres -c "CREATE DATABASE onboarding_diary;"
+```
+
+> **Note**: On Linux, you may need to run psql commands as the postgres user:
+> ```bash
+> sudo -u postgres createdb onboarding_diary
+> ```
 
 ### Setup
 
@@ -144,31 +180,59 @@ User Action ──▶ React Page ──▶ API Client (fetch)
    cd Onboarding-diary-app-by-devin-exercise
    ```
 
-2. **Set up the server**
+2. **Configure environment variables**
    ```bash
    cd server
-   cp .env.example .env   # Edit .env with your database credentials
+   cp .env.example .env
+   ```
+   Edit `server/.env` with your PostgreSQL credentials:
+   ```env
+   DATABASE_URL="postgresql://YOUR_USERNAME:YOUR_PASSWORD@localhost:5432/onboarding_diary?schema=public"
+   JWT_SECRET="change-this-to-a-random-secret-string"
+   JWT_EXPIRES_IN="7d"
+   PORT=3001
+   CORS_ORIGIN="http://localhost:5173"
+   ```
+   Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with your PostgreSQL credentials (default is often `postgres`/`postgres`).
+
+3. **Install server dependencies and run migrations**
+   ```bash
+   cd server
    npm install
    npx prisma migrate dev --name init
    npx prisma generate
    ```
+   > If `prisma migrate` fails with a connection error, verify:
+   > - PostgreSQL is running (`pg_isready` or `sudo systemctl status postgresql`)
+   > - The `DATABASE_URL` in `.env` has the correct username, password, host, and port
+   > - The `onboarding_diary` database exists (see "Creating the Database" above)
 
-3. **Set up the client**
+4. **Install client dependencies**
    ```bash
    cd client
    npm install
    ```
 
-4. **Run the application**
+5. **Run the application**
    ```bash
-   # Terminal 1 - Backend
+   # Terminal 1 - Backend (from project root)
    cd server && npm run dev
 
-   # Terminal 2 - Frontend
+   # Terminal 2 - Frontend (from project root)
    cd client && npm run dev
    ```
 
-5. Open http://localhost:5173 in your browser
+6. Open http://localhost:5173 in your browser
+
+### Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `ECONNREFUSED` on prisma migrate | PostgreSQL is not running. Start it with `brew services start postgresql` (macOS) or `sudo systemctl start postgresql` (Linux) |
+| `password authentication failed` | Check the username/password in `DATABASE_URL` in `server/.env` |
+| `database "onboarding_diary" does not exist` | Run `createdb onboarding_diary` or `psql -U postgres -c "CREATE DATABASE onboarding_diary;"` |
+| `EACCES` permission errors on npm install | Don't use `sudo` with npm. Fix permissions: `sudo chown -R $(whoami) ~/.npm` |
+| Port 3001 or 5173 already in use | Kill the process using the port: `lsof -ti:3001 \| xargs kill` |
 
 ## Features
 
